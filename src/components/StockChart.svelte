@@ -67,7 +67,7 @@
 	// Format time for tooltip
 	function formatTime(time) {
 		//@ts-ignore
-		return `${time}`;
+		return `${time.getHours()}:${time.getMinutes().toString().padStart(2, '0')}`;
 	}
 </script>
 
@@ -88,7 +88,7 @@
 			<Axis placement="left" grid rule />
 			<Axis placement="bottom" format={(d) => formatTime(d)} rule />
 
-			<Spline class="stroke-2 stroke-primary" />
+			<Spline class="stroke-3 stroke-primary fill-none" />
 		</Svg>
 	</Chart>
 </div>
