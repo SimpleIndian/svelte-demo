@@ -3,7 +3,7 @@
 	import { stockStore } from '$lib/stores/StockStore.svelte';
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import StockChart from '../components/StockChart.svelte';
-
+	import StockEditDrawer from '../components/StockEditDrawer.svelte';
 	let selectedStock: any = null;
 	let isDrawerOpen = false;
 
@@ -87,15 +87,23 @@
 				<div>{stockStore.data[index].SellPrice}</div>
 				<div>{stockStore.data[index].LTQ}</div>
 				<div>
-					<button
-						class="btn btn-circle btn-xs"
-						on:click={() => openDrawer(stockStore.data[index])}
-					>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3">
-                            <path d="M12 20h9"></path>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                        </svg>
-                        <span class="sr-only">Edit</span>
+					<button class="btn btn-circle btn-xs" on:click={() => openDrawer(stockStore.data[index])}>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="feather feather-edit-3"
+						>
+							<path d="M12 20h9"></path>
+							<path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+						</svg>
+						<span class="sr-only">Edit</span>
 					</button>
 				</div>
 			</div>
@@ -104,75 +112,11 @@
 
 	<!-- Drawer -->
 	{#if isDrawerOpen}
-		<div class="drawer drawer-end fixed inset-0 z-50">
-			<input type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
-			<div class="drawer-side">
-				<label for="edit-drawer" class="drawer-overlay">
-                </label>
-				<div class="p-4 w-96 bg-base-200 h-full">
-					<h3 class="text-lg font-bold mb-4">Edit Stock Data</h3>
-					<form on:submit|preventDefault={handleSubmit} class="space-y-4">
-						<div class="form-control">
-							<label class="label" for="ltp">
-								<span class="label-text">LTP</span>
-							</label>
-							<input
-								id="ltp"
-								type="number"
-								step="0.01"
-								min="0"
-								class="input input-bordered"
-								bind:value={selectedStock.LTP}
-							/>
-						</div>
-						<div class="form-control">
-							<label class="label" for="buyPrice">
-								<span class="label-text">Buy Price</span>
-							</label>
-							<input
-								id="buyPrice"
-								type="number"
-								step="0.01"
-								min="0"
-								class="input input-bordered"
-								bind:value={selectedStock.BuyPrice}
-							/>
-						</div>
-						<div class="form-control">
-							<label class="label" for="sellPrice">
-								<span class="label-text">Sell Price</span>
-							</label>
-							<input
-								id="sellPrice"
-								type="number"
-								step="0.01"
-								min="0"
-								class="input input-bordered"
-								bind:value={selectedStock.SellPrice}
-							/>
-						</div>
-						<div class="form-control">
-							<label class="label" for="volume">
-								<span class="label-text">Volume</span>
-							</label>
-							<input
-								id="volume"
-								type="number"
-								step="1"
-								min="0"
-								class="input input-bordered"
-								bind:value={selectedStock.LTQ}
-							/>
-						</div>
-						<div class="mt-4 space-x-2">
-							<button type="submit" class="btn btn-primary">Save</button>
-							<button type="button" class="btn" on:click={() => (isDrawerOpen = false)}>
-								Cancel
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
+		<StockEditDrawer
+			isOpen={isDrawerOpen}
+			stock={selectedStock}
+			onSubmit={handleSubmit}
+			onClose={() => (isDrawerOpen = false)}
+		/>
 	{/if}
 {/if}
