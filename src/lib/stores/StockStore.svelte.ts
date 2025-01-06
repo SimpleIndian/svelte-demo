@@ -34,9 +34,16 @@ function createStockStore() {
 				skipEmptyLines: true,
 				transform: (value: string, field: string) => {
 					if (
-						["Ticker",'LTP', 'BuyPrice', 'SellPrice', 'BuyQty', 'SellQty', 'LTQ', 'OpenInterest'].includes(
-							field
-						)
+						[
+							'Ticker',
+							'LTP',
+							'BuyPrice',
+							'SellPrice',
+							'BuyQty',
+							'SellQty',
+							'LTQ',
+							'OpenInterest'
+						].includes(field)
 					) {
 						return parseFloat(value);
 					}
@@ -50,6 +57,17 @@ function createStockStore() {
 			error = err instanceof Error ? err.message : 'Failed to load data';
 		} finally {
 			isLoading = false;
+		}
+	}
+
+	function updateStock(updatedStock: StockData) {
+		const index = data.findIndex(
+			(item) => item.Date === updatedStock.Date && item.Time === updatedStock.Time
+		);
+
+		if (index !== -1) {
+			// Create a new array with the updated stock data
+			data = [...data.slice(0, index), updatedStock, ...data.slice(index + 1)];
 		}
 	}
 
@@ -69,7 +87,8 @@ function createStockStore() {
 		get averagePrice() {
 			return averagePrice;
 		},
-		loadData
+		loadData,
+		updateStock
 	};
 }
 
